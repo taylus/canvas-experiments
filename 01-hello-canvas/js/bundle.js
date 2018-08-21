@@ -11,6 +11,23 @@ var graphics = (function () {
     function scale(canvas, scale) {
         canvas.style.width = canvas.width * scale + "px";
         canvas.style.height = canvas.height * scale + "px";
+        canvas.setAttribute("scale", scale.toString());
+    }
+    /**
+     * Scales the canvas to the largest whole number that fits the given dimensions.
+     */
+    function scaleFullscreen(canvas, width, height) {
+        if (width === void 0) { width = window.innerWidth; }
+        if (height === void 0) { height = window.innerHeight; }
+        var scaleFactor = getBestFitScaleFor(canvas, width, height);
+        scale(canvas, scaleFactor);
+    }
+    /**
+     * Returns the largest whole number scale factor that won't result in the canvas being larger than the given dimensions.
+     * Will always return a number n >= 1 so the canvas doesn't scale itself into zero size.
+     */
+    function getBestFitScaleFor(canvas, width, height) {
+        return Math.max(1, Math.min(Math.floor(width / canvas.width - 1), Math.floor(height / canvas.height - 1)));
     }
     function loadImage(src) {
         var img = new Image();
@@ -25,6 +42,7 @@ var graphics = (function () {
     return {
         createCanvas: createCanvas,
         scale: scale,
+        scaleFullscreen: scaleFullscreen,
         loadImage: loadImage
     };
 }());
@@ -43,10 +61,13 @@ var graphics = (function () {
     var currFrame = 0;
     var spriteSize = 16;
     document.addEventListener("DOMContentLoaded", init);
+    window.addEventListener("resize", function () {
+        graphics.scaleFullscreen(canvas);
+    });
     function init() {
         canvas = graphics.createCanvas(160, 144);
         document.body.appendChild(canvas);
-        graphics.scale(canvas, 4);
+        graphics.scaleFullscreen(canvas);
         context = canvas.getContext("2d");
         graphics.loadImage("img/kirby.png").then(function (image) {
             spritesheet = image;

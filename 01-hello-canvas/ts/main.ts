@@ -14,11 +14,14 @@
     const spriteSize = 16;
 
     document.addEventListener("DOMContentLoaded", init);
+    window.addEventListener("resize", function () {
+        graphics.scaleFullscreen(canvas);
+    })
 
     function init() {
         canvas = graphics.createCanvas(160, 144);
         document.body.appendChild(canvas);
-        graphics.scale(canvas, 4);
+        graphics.scaleFullscreen(canvas);
 
         context = canvas.getContext("2d");
         graphics.loadImage("img/kirby.png").then(function (image) {
