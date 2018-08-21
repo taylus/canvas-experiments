@@ -5,8 +5,8 @@
             "es2015",
             "dom"
         ],
-        "module": "commonjs",
+        "module": "none",
         "sourceMap": true,
-        "outDir": "js"
+        "outFile": "js/bundle.js"
     }
 }
