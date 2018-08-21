@@ -1,3 +1,4 @@
+/// <reference path="graphics.ts" />
 (function () {
     "use strict";
     var lastTime: number;  //timestamp of last game loop iteration
